@@ -18,6 +18,7 @@
     <modules>
         <module>member</module>
         <module>common</module>
+        <module>gateway</module>
     </modules>
 
     <properties>
