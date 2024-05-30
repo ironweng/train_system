@@ -5,6 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.zhaopei.train.member.domain.Member;
 import com.zhaopei.train.member.domain.MemberExample;
 import com.zhaopei.train.member.mapper.MemberMapper;
+import com.zhaopei.train.member.req.MemberRegisterReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,8 @@ public class MemberService {
         return Math.toIntExact(memberMapper.countByExample(null));
     }
 
-    public long register (String mobile){
+    public long register (MemberRegisterReq req){
+        String mobile=req.getMobile();
         //MemberExample相当于是一个工具，它为每个Member类中的字段设置了很多条件查询的方法
         //例如下面的andMobileEqualTo方法就是为Mobile字段设置的一个条件查询方法
         MemberExample memberExample=new MemberExample();
