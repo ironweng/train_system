@@ -57,6 +57,7 @@ public class MemberService {
 
         //如果手机号不存在，则插入一条记录
         if(CollUtil.isEmpty(list)){
+            log.info("手机号不存在,可以插入数据库");
             Member member =new Member();
             member.setId(SnowUtil.getSnowflakeNextId());
             member.setMobile(mobile);
