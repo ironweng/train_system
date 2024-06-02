@@ -2,8 +2,10 @@ package com.zhaopei.train.member.controller;
 
 
 import com.zhaopei.train.common.resp.CommonResp;
+import com.zhaopei.train.member.req.MemberLoginReq;
 import com.zhaopei.train.member.req.MemberRegisterReq;
 import com.zhaopei.train.member.req.MemberSendCodeReq;
+import com.zhaopei.train.member.resp.MemberLoginResp;
 import com.zhaopei.train.member.service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +45,11 @@ public class MemberController {
     public CommonResp<Long> sendCode(@Valid MemberSendCodeReq req){
         memberService.sendCode(req);
         return new CommonResp<>();
+    }
+
+    @PostMapping("/login")
+    public CommonResp<MemberLoginResp> login(@Valid MemberLoginReq req){
+        MemberLoginResp resp = memberService.login(req);
+        return new CommonResp<>(resp);
     }
 }
