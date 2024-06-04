@@ -4,9 +4,9 @@ package com.zhaopei.train.member.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
-import cn.hutool.jwt.JWTUtil;
 import com.zhaopei.train.common.exception.BusinessException;
 import com.zhaopei.train.common.exception.BusinessExceptionEnum;
+import com.zhaopei.train.common.util.JwtUtil;
 import com.zhaopei.train.common.util.SnowUtil;
 import com.zhaopei.train.member.domain.Member;
 import com.zhaopei.train.member.domain.MemberExample;
@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -88,10 +87,8 @@ public class MemberService {
         }
 
         MemberLoginResp memberLoginResp = BeanUtil.copyProperties(memberDB, MemberLoginResp.class);
-        //下面的map和key都是根据JWTUtil.createToken方法中需要的参数而定的。
-        Map<String, Object> map = BeanUtil.beanToMap(memberLoginResp);
-        String key="zhaopei12306";
-        String token=JWTUtil.createToken(map,key.getBytes());
+        //这里的JwtUtil.createToken是我们写的产生JWT的工具类，我们基于hutool提供的类写的并加以封装。
+        String token= JwtUtil.createToken(memberLoginResp.getId(),memberLoginResp.getMobile());
         memberLoginResp.setToken(token);
         return memberLoginResp;
     }
