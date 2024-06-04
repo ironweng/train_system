@@ -4,6 +4,7 @@ package com.zhaopei.train.member.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
+import cn.hutool.jwt.JWTUtil;
 import com.zhaopei.train.common.exception.BusinessException;
 import com.zhaopei.train.common.exception.BusinessExceptionEnum;
 import com.zhaopei.train.common.util.SnowUtil;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -85,7 +87,13 @@ public class MemberService {
             throw new BusinessException(BusinessExceptionEnum.MEMBER_MOBILE_CODE_ERROR);
         }
 
-        return BeanUtil.copyProperties(memberDB,MemberLoginResp.class);
+        MemberLoginResp memberLoginResp = BeanUtil.copyProperties(memberDB, MemberLoginResp.class);
+        //下面的map和key都是根据JWTUtil.createToken方法中需要的参数而定的。
+        Map<String, Object> map = BeanUtil.beanToMap(memberLoginResp);
+        String key="zhaopei12306";
+        String token=JWTUtil.createToken(map,key.getBytes());
+        memberLoginResp.setToken(token);
+        return memberLoginResp;
     }
 
     private Member selectByMobile(String mobile) {
