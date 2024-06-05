@@ -3,12 +3,13 @@
 GET http://localhost:8000/member/member/count
 Accept: application/json
 token: 123
+
 ###
 
 POST http://localhost:8000/member/member/register
 Content-Type: application/x-www-form-urlencoded
 
-mobile =139
+mobile = 139
 
 ###
 
@@ -16,16 +17,25 @@ POST http://localhost:8000/member/member/send-code
 Content-Type: application/json
 
 {
-"mobile" : "13965962003"
+  "mobile": "13965962003"
 }
+
 ###
 
 POST http://localhost:8000/member/member/login
 Content-Type: application/json
 
 {
-  "mobile" : "13965962003",
-  "code" : "8888"
+  "mobile": "13000000001",
+  "code": "8888"
 }
+
+
+> {%
+    client.log(JSON.stringify(response.body));
+    client.log(JSON.stringify(response.body.content.token));
+    client.global.set("test_token", response.body.content.token);
+%}
+
 
 ###
