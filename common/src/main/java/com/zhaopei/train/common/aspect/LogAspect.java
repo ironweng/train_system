@@ -1,6 +1,5 @@
 package com.zhaopei.train.common.aspect;
 
-import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
 import jakarta.servlet.ServletRequest;
@@ -14,7 +13,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -39,9 +37,6 @@ public class LogAspect {
     @Before("controllerPointcut()")
     public void doBefore(JoinPoint joinPoint) {
 
-        //增加日志流水号，这样在控制台看到是同一个流水号的都是同一个请求，方便区分
-        MDC.put("LOG_ID",System.currentTimeMillis()+ RandomUtil.randomString(3));
-
         // 开始打印请求日志
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
@@ -49,7 +44,7 @@ public class LogAspect {
         String name = signature.getName();
 
         // 打印请求信息
-        log.info("------------- 开始 -------------");
+        log.info("------------AOP开始 ------------");
         log.info("请求地址: {} {}", request.getRequestURL().toString(), request.getMethod());
         log.info("类名方法: {}.{}", signature.getDeclaringTypeName(), name);
         log.info("远程地址: {}", request.getRemoteAddr());
@@ -86,7 +81,7 @@ public class LogAspect {
         PropertyPreFilters.MySimplePropertyPreFilter excludefilter = filters.addFilter();
         excludefilter.addExcludes(excludeProperties);
         log.info("返回结果: {}", JSONObject.toJSONString(result, excludefilter));
-        log.info("------------- 结束 耗时：{} ms -------------", System.currentTimeMillis() - startTime);
+        log.info("-----------AOP结束 耗时：{} ms -----------", System.currentTimeMillis() - startTime);
         return result;
     }
 
