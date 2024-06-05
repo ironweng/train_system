@@ -26,7 +26,7 @@ public class JwtUtil {
         GlobalBouncyCastleProvider.setUseBouncyCastle(false);
         DateTime now = DateTime.now();
         //比较敏感的系统可以设置1小时有效，本项目设定24小时有效
-        DateTime expTime = now.offsetNew(DateField.HOUR, 24);
+        DateTime expTime = now.offsetNew(DateField.SECOND, 10);
         Map<String, Object> payload = new HashMap<>();
         // 签发时间
         payload.put(JWTPayload.ISSUED_AT, now);
@@ -67,9 +67,9 @@ public class JwtUtil {
     }
 
     public static void main(String[] args) {
-        createToken(1L, "123");
+        createToken(1L, "1234");
 
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE2NzY4OTk4MjcsIm1vYmlsZSI6IjEyMyIsImlkIjoxLCJleHAiOjE2NzY4OTk4MzcsImlhdCI6MTY3Njg5OTgyN30.JbFfdeNHhxKhAeag63kifw9pgYhnNXISJM5bL6hM8eU";
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE3MTc1NjIwNjQsIm1vYmlsZSI6IjEyMzQiLCJpZCI6MSwiZXhwIjoxNzE3NTYyMDc0LCJpYXQiOjE3MTc1NjIwNjR9.FDF4qiSAxwcr-jSl_aQGL2_MQq7xiN8xO6ZzgyN9URE";
         validate(token);
 
         getJSONObject(token);
