@@ -1,0 +1,14 @@
+#第一个member表示模块，第二个member表示表
+#在header(请求头)加参数，不需要空一行，例如token参数，但是如果body里面加参数，就需要空一行，例如下面两个请求
+
+POST http://localhost:8001/member/passenger/save
+Content-Type: application/json
+
+{
+  "memberId" : "1",
+  "name" : "zhangsan",
+  "idCard": "342324195511176257",
+  "type" : "1"
+}
+
+###
