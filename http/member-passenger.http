@@ -6,8 +6,8 @@ Content-Type: application/json
 token: {{test_token}}
 
 {
-  "memberId" : "1",
-  "name" : "zhangsan",
+  "memberId" : "",
+  "name" : "LiSi",
   "idCard": "342324195511176257",
   "type" : "1"
 }
