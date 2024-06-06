@@ -14,7 +14,7 @@ token: {{test_token}}
 
 ###
 
-GET http://localhost:8000/member/passenger/query-list
+GET http://localhost:8000/member/passenger/query-list?page=3&size=200
 Accept: application/json
 token: {{test_token}}
 
