@@ -27,6 +27,8 @@ public class PassengerService {
     @Autowired
     private PassengerMapper passengerMapper;
 
+
+
     public void save(PassengerSaveReq req){
         DateTime now=DateTime.now();
         Passenger passenger= BeanUtil.copyProperties(req,Passenger.class);
@@ -40,6 +42,7 @@ public class PassengerService {
 
     public PageResp<PassengerQueryResp> queryList(PassengerQueryReq req){
         PassengerExample passengerExample=new PassengerExample();
+        passengerExample.setOrderByClause("id desc");
         PassengerExample.Criteria criteria = passengerExample.createCriteria();
         if(ObjUtil.isNotNull(req.getMemberId())){
             criteria.andMemberIdEqualTo(req.getMemberId());
