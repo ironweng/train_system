@@ -3,6 +3,7 @@ package com.zhaopei.train.member.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjUtil;
+import com.github.pagehelper.PageHelper;
 import com.zhaopei.train.common.context.LoginMemberContext;
 import com.zhaopei.train.common.util.SnowUtil;
 import com.zhaopei.train.member.domain.Passenger;
@@ -39,6 +40,7 @@ public class PassengerService {
         if(ObjUtil.isNotNull(req.getMemberId())){
             criteria.andMemberIdEqualTo(req.getMemberId());
         }
+        PageHelper.startPage(2,2);
         List<Passenger> passengerList = passengerMapper.selectByExample(passengerExample);
         return BeanUtil.copyToList(passengerList, PassengerQueryResp.class);
     }
