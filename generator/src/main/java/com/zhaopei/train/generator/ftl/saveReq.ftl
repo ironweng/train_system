@@ -1,4 +1,4 @@
-package com.zhaopei.train.member.req;
+package com.zhaopei.train.${module}.req;
 
 <#list typeSet as type>
 <#if type=='Date'>

@@ -1,4 +1,4 @@
-package com.zhaopei.train.member.service;
+package com.zhaopei.train.${module}.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
@@ -8,12 +8,12 @@ import com.github.pagehelper.PageInfo;
 import com.zhaopei.train.common.context.LoginMemberContext;
 import com.zhaopei.train.common.resp.PageResp;
 import com.zhaopei.train.common.util.SnowUtil;
-import com.zhaopei.train.member.domain.${Domain};
-import com.zhaopei.train.member.domain.${Domain}Example;
-import com.zhaopei.train.member.mapper.${Domain}Mapper;
-import com.zhaopei.train.member.req.${Domain}QueryReq;
-import com.zhaopei.train.member.req.${Domain}SaveReq;
-import com.zhaopei.train.member.resp.${Domain}QueryResp;
+import com.zhaopei.train.${module}.domain.${Domain};
+import com.zhaopei.train.${module}.domain.${Domain}Example;
+import com.zhaopei.train.${module}.mapper.${Domain}Mapper;
+import com.zhaopei.train.${module}.req.${Domain}QueryReq;
+import com.zhaopei.train.${module}.req.${Domain}SaveReq;
+import com.zhaopei.train.${module}.resp.${Domain}QueryResp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

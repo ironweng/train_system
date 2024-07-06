@@ -1,12 +1,12 @@
-package com.zhaopei.train.member.controller;
+package com.zhaopei.train.${module}.controller;
 
 import com.zhaopei.train.common.context.LoginMemberContext;
 import com.zhaopei.train.common.resp.CommonResp;
 import com.zhaopei.train.common.resp.PageResp;
-import com.zhaopei.train.member.req.${Domain}QueryReq;
-import com.zhaopei.train.member.req.${Domain}SaveReq;
-import com.zhaopei.train.member.resp.${Domain}QueryResp;
-import com.zhaopei.train.member.service.${Domain}Service;
+import com.zhaopei.train.${module}.req.${Domain}QueryReq;
+import com.zhaopei.train.${module}.req.${Domain}SaveReq;
+import com.zhaopei.train.${module}.resp.${Domain}QueryResp;
+import com.zhaopei.train.${module}.service.${Domain}Service;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
