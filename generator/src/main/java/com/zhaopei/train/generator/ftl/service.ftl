@@ -5,7 +5,6 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zhaopei.train.common.context.LoginMemberContext;
 import com.zhaopei.train.common.resp.PageResp;
 import com.zhaopei.train.common.util.SnowUtil;
 import com.zhaopei.train.${module}.domain.${Domain};
@@ -32,7 +31,6 @@ public class ${Domain}Service {
         // if中是新增保存
         if(ObjUtil.isNull(${domain}.getId())){
             //直接通过TreadLocal线程本地变量获取当前登录的会员id
-            ${domain}.setMemberId(LoginMemberContext.getId());
             ${domain}.setId(SnowUtil.getSnowflakeNextId());
             ${domain}.setCreateTime(now);
             ${domain}.setUpdateTime(now);
@@ -48,9 +46,7 @@ public class ${Domain}Service {
         ${Domain}Example ${domain}Example=new ${Domain}Example();
         ${domain}Example.setOrderByClause("id desc");
         ${Domain}Example.Criteria criteria = ${domain}Example.createCriteria();
-        if(ObjUtil.isNotNull(req.getMemberId())){
-            criteria.andMemberIdEqualTo(req.getMemberId());
-        }
+
 
         log.info("req查询页码:{}",req.getPage());
         log.info("req每页条数:{}",req.getSize());
