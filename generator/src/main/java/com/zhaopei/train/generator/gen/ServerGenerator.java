@@ -15,7 +15,7 @@ import java.util.*;
 
 public class ServerGenerator {
     static boolean readOnly =false;
-    static String vuePath="web/src/views/main/";
+    static String vuePath="admin/src/views/main/";
     static String serverPath = "[module]/src/main/java/com/zhaopei/train/[module]/";
     static String pomPath = "generator/pom.xml";
 
@@ -78,9 +78,10 @@ public class ServerGenerator {
 
 //        gen(Domain,param,"service","service");
 //        gen(Domain,param,"controller","controller");
-//        gen(Domain, param, "req","saveReq");
+        gen(Domain, param, "req","saveReq");
+//        gen(Domain, param, "req","queryReq");
 //        gen(Domain, param, "resp","QueryResp");
-        genVue(do_main,param);
+//        genVue(do_main,param);
     }
 
     private static void gen(String Domain, Map<String, Object> param, String packageName, String target) throws IOException, TemplateException {
