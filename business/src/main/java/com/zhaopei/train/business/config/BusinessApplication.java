@@ -1,6 +1,7 @@
 package com.zhaopei.train.business.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,7 +10,7 @@ import org.springframework.core.env.Environment;
 @Slf4j
 @SpringBootApplication
 @ComponentScan("com.zhaopei")
-//@MapperScan("com.zhaopei.train.*.mapper")
+@MapperScan("com.zhaopei.train.*.mapper")
 public class BusinessApplication {
 
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package com.zhaopei.train.${module}.controller;
+package com.zhaopei.train.${module}.controller.admin;
 
 import com.zhaopei.train.common.context.LoginMemberContext;
 import com.zhaopei.train.common.resp.CommonResp;
@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/${domain}")
-public class ${Domain}Controller {
+@RequestMapping("/admin/${domain}")
+public class ${Domain}AdminController {
 
     @Autowired
     private ${Domain}Service ${domain}Service;

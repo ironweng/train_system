@@ -1,18 +1,19 @@
-package com.zhaopei.train.business.controller;
+package com.zhaopei.train.business.controller.admin;
 
+import com.zhaopei.train.common.context.LoginMemberContext;
+import com.zhaopei.train.common.resp.CommonResp;
+import com.zhaopei.train.common.resp.PageResp;
 import com.zhaopei.train.business.req.StationQueryReq;
 import com.zhaopei.train.business.req.StationSaveReq;
 import com.zhaopei.train.business.resp.StationQueryResp;
 import com.zhaopei.train.business.service.StationService;
-import com.zhaopei.train.common.resp.CommonResp;
-import com.zhaopei.train.common.resp.PageResp;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/station")
-public class StationController {
+@RequestMapping("/admin/station")
+public class StationAdminController {
 
     @Autowired
     private StationService stationService;
