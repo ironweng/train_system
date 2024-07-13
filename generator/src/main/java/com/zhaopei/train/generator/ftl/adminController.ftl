@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin/${domain}")
+@RequestMapping("/admin/${do_main}")
 public class ${Domain}AdminController {
 
     @Autowired
