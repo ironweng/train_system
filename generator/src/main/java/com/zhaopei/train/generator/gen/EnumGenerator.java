@@ -2,6 +2,7 @@ package com.zhaopei.train.generator.gen;
 
 
 import cn.hutool.core.util.StrUtil;
+import com.zhaopei.train.business.enums.SeatColEnum;
 import com.zhaopei.train.business.enums.SeatTypeEnum;
 import com.zhaopei.train.business.enums.TrainTypeEnum;
 import com.zhaopei.train.member.enums.PassengerTypeEnum;
@@ -27,7 +28,7 @@ public class EnumGenerator {
             toJson(PassengerTypeEnum.class, bufferObject, bufferArray);
             toJson(TrainTypeEnum.class, bufferObject, bufferArray);
             toJson(SeatTypeEnum.class, bufferObject, bufferArray);
-//            toJson(SeatColEnum.class, bufferObject, bufferArray);
+            toJson(SeatColEnum.class, bufferObject, bufferArray);
 //            toJson(ConfirmOrderStatusEnum.class, bufferObject, bufferArray);
 
             StringBuffer buffer = bufferObject.append("\r\n").append(bufferArray);
