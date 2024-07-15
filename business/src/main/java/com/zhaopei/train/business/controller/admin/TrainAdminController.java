@@ -1,15 +1,16 @@
 package com.zhaopei.train.business.controller.admin;
 
-import com.zhaopei.train.common.context.LoginMemberContext;
-import com.zhaopei.train.common.resp.CommonResp;
-import com.zhaopei.train.common.resp.PageResp;
 import com.zhaopei.train.business.req.TrainQueryReq;
 import com.zhaopei.train.business.req.TrainSaveReq;
 import com.zhaopei.train.business.resp.TrainQueryResp;
 import com.zhaopei.train.business.service.TrainService;
+import com.zhaopei.train.common.resp.CommonResp;
+import com.zhaopei.train.common.resp.PageResp;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/train")
@@ -35,4 +36,11 @@ public class TrainAdminController {
         trainService.delete(id);
         return new CommonResp<>();
     }
+
+    @GetMapping("/query-all")
+    public CommonResp<List<TrainQueryResp>> queryList(){
+        List<TrainQueryResp> list = trainService.queryAll();
+        return new CommonResp<>(list);
+    }
+
 }

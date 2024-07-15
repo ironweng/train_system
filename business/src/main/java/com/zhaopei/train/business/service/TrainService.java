@@ -68,4 +68,12 @@ public class TrainService {
     public void delete(Long id){
         trainMapper.deleteByPrimaryKey(id);
     }
+
+    //查询所有车次信息,可用于做车次编号的下拉框
+    public List<TrainQueryResp> queryAll(){
+        TrainExample trainExample=new TrainExample();
+        trainExample.setOrderByClause("code asc");
+        List<Train> trainList = trainMapper.selectByExample(trainExample);
+        return BeanUtil.copyToList(trainList, TrainQueryResp.class);
+    }
 }
