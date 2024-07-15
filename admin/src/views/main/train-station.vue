@@ -60,9 +60,11 @@ import {defineComponent, ref, onMounted, watch} from 'vue';
 import {notification} from "ant-design-vue";
 import axios from "axios";
 import {pinyin} from "pinyin-pro";
+import TrainSelectView from "@/components/train-select.vue";
 
 export default defineComponent({
   name: "train-station-view",
+  components: {TrainSelectView},
   setup() {
     const visible = ref(false);
     let trainStation = ref({
@@ -218,32 +220,11 @@ export default defineComponent({
       });
     };
 
-    //----------车次下拉框
-    const trains=ref([]);
-    //查询所有车次，用于车次下拉框
-    const queryTrainCode = () => {
-      axios.get("/business/admin/train/query-all").then((response) => {
-        let data=response.data;
-        if(data.success) {
-          trains.value=data.content;
-        } else {
-          notification.error({description: data.message});
-        }
-      });
-    };
-
-    //车次下拉框中的过滤，例如输入"山"，下拉框就只显示山东、山西...等选项
-    const filterTrainCodeOption = (input,option) => {
-      console.log(input,option);
-      return option.label.toLowerCase().indexOf(input.toLowerCase())>=0;
-    };
-
     onMounted(() => {
       handleQuery({
         page: 1,
         size: pagination.value.pageSize
       });
-      queryTrainCode();
     });
 
     return {
@@ -259,8 +240,6 @@ export default defineComponent({
       handleOk,
       onEdit,
       onDelete,
-      filterTrainCodeOption,
-      trains
     };
   },
 });
