@@ -47,7 +47,7 @@ public class TrainStationService {
         trainStationExample.setOrderByClause("train_code asc, `index` asc");
         TrainStationExample.Criteria criteria = trainStationExample.createCriteria();
         //如果某个参数(TrainCode)有值，就按这个参数来查询
-        if(ObjUtil.isNotNull(req.getTrainCode())){
+        if(ObjUtil.isNotEmpty(req.getTrainCode())){
             criteria.andTrainCodeEqualTo(req.getTrainCode());
         }
 
