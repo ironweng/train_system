@@ -5,7 +5,7 @@ import com.zhaopei.train.business.domain.trainSeatExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-public interface trainSeatMapper {
+public interface TrainSeatMapper {
     long countByExample(trainSeatExample example);
 
     int deleteByExample(trainSeatExample example);

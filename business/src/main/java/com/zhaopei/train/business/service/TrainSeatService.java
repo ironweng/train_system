@@ -9,9 +9,9 @@ import com.zhaopei.train.common.resp.PageResp;
 import com.zhaopei.train.common.util.SnowUtil;
 import com.zhaopei.train.business.domain.trainSeat;
 import com.zhaopei.train.business.domain.trainSeatExample;
-import com.zhaopei.train.business.mapper.trainSeatMapper;
-import com.zhaopei.train.business.req.trainSeatQueryReq;
-import com.zhaopei.train.business.req.trainSeatSaveReq;
+import com.zhaopei.train.business.mapper.TrainSeatMapper;
+import com.zhaopei.train.business.req.TrainSeatQueryReq;
+import com.zhaopei.train.business.req.TrainSeatSaveReq;
 import com.zhaopei.train.business.resp.trainSeatQueryResp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +20,12 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class trainSeatService {
+public class TrainSeatService {
 
     @Autowired
-    private trainSeatMapper trainSeatMapper;
+    private TrainSeatMapper trainSeatMapper;
 
-    public void save(trainSeatSaveReq req){
+    public void save(TrainSeatSaveReq req){
         DateTime now=DateTime.now();
         trainSeat trainSeat= BeanUtil.copyProperties(req,trainSeat.class);
         // if中是新增保存
@@ -42,11 +42,15 @@ public class trainSeatService {
         }
     }
 
-    public PageResp<trainSeatQueryResp> queryList(trainSeatQueryReq req){
+    public PageResp<trainSeatQueryResp> queryList(TrainSeatQueryReq req){
         trainSeatExample trainSeatExample=new trainSeatExample();
-        trainSeatExample.setOrderByClause("id desc");
+        trainSeatExample.setOrderByClause("train_code asc,carriage_index asc,carriage_seat_index asc");
         trainSeatExample.Criteria criteria = trainSeatExample.createCriteria();
 
+        //如果某个参数(TrainCode)有值，就按这个参数来查询
+        if(ObjUtil.isNotEmpty(req.getTrainCode())){
+            criteria.andTrainCodeEqualTo(req.getTrainCode());
+        }
 
         log.info("req查询页码:{}",req.getPage());
         log.info("req每页条数:{}",req.getSize());

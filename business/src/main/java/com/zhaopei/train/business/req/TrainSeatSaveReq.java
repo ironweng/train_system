@@ -1,12 +1,12 @@
 package com.zhaopei.train.business.req;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class trainSeatSaveReq {
+import java.util.Date;
+
+public class TrainSeatSaveReq {
 
     /**
      * id

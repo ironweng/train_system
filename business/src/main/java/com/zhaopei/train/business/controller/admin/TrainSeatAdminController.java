@@ -1,31 +1,30 @@
 package com.zhaopei.train.business.controller.admin;
 
-import com.zhaopei.train.common.context.LoginMemberContext;
+import com.zhaopei.train.business.req.TrainSeatQueryReq;
+import com.zhaopei.train.business.req.TrainSeatSaveReq;
+import com.zhaopei.train.business.resp.trainSeatQueryResp;
+import com.zhaopei.train.business.service.TrainSeatService;
 import com.zhaopei.train.common.resp.CommonResp;
 import com.zhaopei.train.common.resp.PageResp;
-import com.zhaopei.train.business.req.trainSeatQueryReq;
-import com.zhaopei.train.business.req.trainSeatSaveReq;
-import com.zhaopei.train.business.resp.trainSeatQueryResp;
-import com.zhaopei.train.business.service.trainSeatService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin/train-seat")
-public class trainSeatAdminController {
+public class TrainSeatAdminController {
 
     @Autowired
-    private trainSeatService trainSeatService;
+    private TrainSeatService trainSeatService;
     
     @PostMapping("/save")
-    public CommonResp<Object> save(@Valid @RequestBody trainSeatSaveReq req){
+    public CommonResp<Object> save(@Valid @RequestBody TrainSeatSaveReq req){
         trainSeatService.save(req);
         return new CommonResp<>();
     }
 
     @GetMapping("/query-list")
-    public CommonResp<PageResp<trainSeatQueryResp>> queryList(@Valid trainSeatQueryReq req){
+    public CommonResp<PageResp<trainSeatQueryResp>> queryList(@Valid TrainSeatQueryReq req){
         PageResp<trainSeatQueryResp> list = trainSeatService.queryList(req);
         return new CommonResp<>(list);
     }
