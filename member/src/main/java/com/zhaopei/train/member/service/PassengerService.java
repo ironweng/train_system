@@ -48,6 +48,7 @@ public class PassengerService {
         PassengerExample passengerExample=new PassengerExample();
         passengerExample.setOrderByClause("id desc");
         PassengerExample.Criteria criteria = passengerExample.createCriteria();
+        //如果某个参数(MemberId)有值，就按这个参数来查询
         if(ObjUtil.isNotNull(req.getMemberId())){
             criteria.andMemberIdEqualTo(req.getMemberId());
         }
