@@ -3,9 +3,11 @@ package com.zhaopei.train.business.controller.admin;
 import com.zhaopei.train.business.req.TrainQueryReq;
 import com.zhaopei.train.business.req.TrainSaveReq;
 import com.zhaopei.train.business.resp.TrainQueryResp;
+import com.zhaopei.train.business.service.TrainSeatService;
 import com.zhaopei.train.business.service.TrainService;
 import com.zhaopei.train.common.resp.CommonResp;
 import com.zhaopei.train.common.resp.PageResp;
+import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,9 @@ public class TrainAdminController {
 
     @Autowired
     private TrainService trainService;
+
+    @Resource
+    private TrainSeatService trainSeatService;
     
     @PostMapping("/save")
     public CommonResp<Object> save(@Valid @RequestBody TrainSaveReq req){
@@ -43,4 +48,9 @@ public class TrainAdminController {
         return new CommonResp<>(list);
     }
 
+    @GetMapping("/gen-seat/{trainCode}")
+    public CommonResp<Object> genSeat(@PathVariable String trainCode) {
+        trainSeatService.genTrainSeat(trainCode);
+        return new CommonResp<>();
+    }
 }

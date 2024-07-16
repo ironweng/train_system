@@ -1,30 +1,30 @@
 package com.zhaopei.train.business.mapper;
 
-import com.zhaopei.train.business.domain.trainSeat;
-import com.zhaopei.train.business.domain.trainSeatExample;
+import com.zhaopei.train.business.domain.TrainSeat;
+import com.zhaopei.train.business.domain.TrainSeatExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface TrainSeatMapper {
-    long countByExample(trainSeatExample example);
+    long countByExample(TrainSeatExample example);
 
-    int deleteByExample(trainSeatExample example);
+    int deleteByExample(TrainSeatExample example);
 
     int deleteByPrimaryKey(Long id);
 
-    int insert(trainSeat record);
+    int insert(TrainSeat record);
 
-    int insertSelective(trainSeat record);
+    int insertSelective(TrainSeat record);
 
-    List<trainSeat> selectByExample(trainSeatExample example);
+    List<TrainSeat> selectByExample(TrainSeatExample example);
 
-    trainSeat selectByPrimaryKey(Long id);
+    TrainSeat selectByPrimaryKey(Long id);
 
-    int updateByExampleSelective(@Param("record") trainSeat record, @Param("example") trainSeatExample example);
+    int updateByExampleSelective(@Param("record") TrainSeat record, @Param("example") TrainSeatExample example);
 
-    int updateByExample(@Param("record") trainSeat record, @Param("example") trainSeatExample example);
+    int updateByExample(@Param("record") TrainSeat record, @Param("example") TrainSeatExample example);
 
-    int updateByPrimaryKeySelective(trainSeat record);
+    int updateByPrimaryKeySelective(TrainSeat record);
 
-    int updateByPrimaryKey(trainSeat record);
+    int updateByPrimaryKey(TrainSeat record);
 }

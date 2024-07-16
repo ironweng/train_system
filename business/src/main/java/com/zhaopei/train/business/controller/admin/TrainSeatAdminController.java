@@ -2,7 +2,7 @@ package com.zhaopei.train.business.controller.admin;
 
 import com.zhaopei.train.business.req.TrainSeatQueryReq;
 import com.zhaopei.train.business.req.TrainSeatSaveReq;
-import com.zhaopei.train.business.resp.trainSeatQueryResp;
+import com.zhaopei.train.business.resp.TrainSeatQueryResp;
 import com.zhaopei.train.business.service.TrainSeatService;
 import com.zhaopei.train.common.resp.CommonResp;
 import com.zhaopei.train.common.resp.PageResp;
@@ -24,8 +24,8 @@ public class TrainSeatAdminController {
     }
 
     @GetMapping("/query-list")
-    public CommonResp<PageResp<trainSeatQueryResp>> queryList(@Valid TrainSeatQueryReq req){
-        PageResp<trainSeatQueryResp> list = trainSeatService.queryList(req);
+    public CommonResp<PageResp<TrainSeatQueryResp>> queryList(@Valid TrainSeatQueryReq req){
+        PageResp<TrainSeatQueryResp> list = trainSeatService.queryList(req);
         return new CommonResp<>(list);
     }
 
