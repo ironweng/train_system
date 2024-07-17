@@ -34,12 +34,14 @@ public class StationService {
         Station station= BeanUtil.copyProperties(req,Station.class);
         // if中是新增保存
         if(ObjUtil.isNull(station.getId())){
+
             //保存之间先校验唯一键是否为空,站名就是唯一键
             Station stationDB  = selectByUnique(req.getName());
             if(ObjUtil.isNotEmpty(stationDB)){
                 //不为空说明站名已经存在，抛出异常，中断新增
                 throw new BusinessException(BusinessExceptionEnum.BUSINESS_STATION_NAME_UNIQUE_ERROR);
             }
+
             //直接通过TreadLocal线程本地变量获取当前登录的会员id
             station.setId(SnowUtil.getSnowflakeNextId());
             station.setCreateTime(now);

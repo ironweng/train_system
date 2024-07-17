@@ -1,21 +1,26 @@
 package com.zhaopei.train.business.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zhaopei.train.common.resp.PageResp;
-import com.zhaopei.train.common.util.SnowUtil;
 import com.zhaopei.train.business.domain.TrainStation;
 import com.zhaopei.train.business.domain.TrainStationExample;
 import com.zhaopei.train.business.mapper.TrainStationMapper;
 import com.zhaopei.train.business.req.TrainStationQueryReq;
 import com.zhaopei.train.business.req.TrainStationSaveReq;
 import com.zhaopei.train.business.resp.TrainStationQueryResp;
+import com.zhaopei.train.common.exception.BusinessException;
+import com.zhaopei.train.common.exception.BusinessExceptionEnum;
+import com.zhaopei.train.common.resp.PageResp;
+import com.zhaopei.train.common.util.SnowUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Slf4j
@@ -30,6 +35,18 @@ public class TrainStationService {
         TrainStation trainStation= BeanUtil.copyProperties(req,TrainStation.class);
         // if中是新增保存
         if(ObjUtil.isNull(trainStation.getId())){
+
+            // 保存之前，先校验唯一键是否存在
+            TrainStation trainStationDB = selectByUnique(req.getTrainCode(), req.getIndex());
+            if (ObjectUtil.isNotEmpty(trainStationDB)) {
+                throw new BusinessException(BusinessExceptionEnum.BUSINESS_TRAIN_STATION_INDEX_UNIQUE_ERROR);
+            }
+            // 保存之前，先校验唯一键是否存在
+            trainStationDB = selectByUnique(req.getTrainCode(), req.getName());
+            if (ObjectUtil.isNotEmpty(trainStationDB)) {
+                throw new BusinessException(BusinessExceptionEnum.BUSINESS_TRAIN_STATION_NAME_UNIQUE_ERROR);
+            }
+
             //直接通过TreadLocal线程本地变量获取当前登录的会员id
             trainStation.setId(SnowUtil.getSnowflakeNextId());
             trainStation.setCreateTime(now);
@@ -39,6 +56,32 @@ public class TrainStationService {
         }else {
             trainStation.setUpdateTime(now);
             trainStationMapper.updateByPrimaryKey(trainStation);
+        }
+    }
+
+    private TrainStation selectByUnique(String trainCode, Integer index) {
+        TrainStationExample trainStationExample = new TrainStationExample();
+        trainStationExample.createCriteria()
+                .andTrainCodeEqualTo(trainCode)
+                .andIndexEqualTo(index);
+        List<TrainStation> list = trainStationMapper.selectByExample(trainStationExample);
+        if (CollUtil.isNotEmpty(list)) {
+            return list.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    private TrainStation selectByUnique(String trainCode, String name) {
+        TrainStationExample trainStationExample = new TrainStationExample();
+        trainStationExample.createCriteria()
+                .andTrainCodeEqualTo(trainCode)
+                .andNameEqualTo(name);
+        List<TrainStation> list = trainStationMapper.selectByExample(trainStationExample);
+        if (CollUtil.isNotEmpty(list)) {
+            return list.get(0);
+        } else {
+            return null;
         }
     }
 

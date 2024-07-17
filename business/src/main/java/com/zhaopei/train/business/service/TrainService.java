@@ -1,21 +1,26 @@
 package com.zhaopei.train.business.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zhaopei.train.common.resp.PageResp;
-import com.zhaopei.train.common.util.SnowUtil;
 import com.zhaopei.train.business.domain.Train;
 import com.zhaopei.train.business.domain.TrainExample;
 import com.zhaopei.train.business.mapper.TrainMapper;
 import com.zhaopei.train.business.req.TrainQueryReq;
 import com.zhaopei.train.business.req.TrainSaveReq;
 import com.zhaopei.train.business.resp.TrainQueryResp;
+import com.zhaopei.train.common.exception.BusinessException;
+import com.zhaopei.train.common.exception.BusinessExceptionEnum;
+import com.zhaopei.train.common.resp.PageResp;
+import com.zhaopei.train.common.util.SnowUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Slf4j
@@ -30,6 +35,13 @@ public class TrainService {
         Train train= BeanUtil.copyProperties(req,Train.class);
         // if中是新增保存
         if(ObjUtil.isNull(train.getId())){
+
+            // 保存之前，先校验唯一键是否存在
+            Train trainDB = selectByUnique(req.getCode());
+            if (ObjectUtil.isNotEmpty(trainDB)) {
+                throw new BusinessException(BusinessExceptionEnum.BUSINESS_TRAIN_CODE_UNIQUE_ERROR);
+            }
+
             //直接通过TreadLocal线程本地变量获取当前登录的会员id
             train.setId(SnowUtil.getSnowflakeNextId());
             train.setCreateTime(now);
@@ -39,6 +51,18 @@ public class TrainService {
         }else {
             train.setUpdateTime(now);
             trainMapper.updateByPrimaryKey(train);
+        }
+    }
+
+    private Train selectByUnique(String code) {
+        TrainExample trainExample = new TrainExample();
+        trainExample.createCriteria()
+                .andCodeEqualTo(code);
+        List<Train> list = trainMapper.selectByExample(trainExample);
+        if (CollUtil.isNotEmpty(list)) {
+            return list.get(0);
+        } else {
+            return null;
         }
     }
 
