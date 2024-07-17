@@ -1,6 +1,7 @@
 package com.zhaopei.train.business.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjUtil;
 import com.github.pagehelper.PageHelper;
@@ -11,6 +12,8 @@ import com.zhaopei.train.business.mapper.StationMapper;
 import com.zhaopei.train.business.req.StationQueryReq;
 import com.zhaopei.train.business.req.StationSaveReq;
 import com.zhaopei.train.business.resp.StationQueryResp;
+import com.zhaopei.train.common.exception.BusinessException;
+import com.zhaopei.train.common.exception.BusinessExceptionEnum;
 import com.zhaopei.train.common.resp.PageResp;
 import com.zhaopei.train.common.util.SnowUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +34,14 @@ public class StationService {
         Station station= BeanUtil.copyProperties(req,Station.class);
         // if中是新增保存
         if(ObjUtil.isNull(station.getId())){
+            //保存之间先校验唯一键是否为空,站名就是唯一键
+            StationExample stationExample=new StationExample();
+            stationExample.createCriteria().andNameEqualTo(req.getName());
+            List<Station> list = stationMapper.selectByExample(stationExample);
+            if(CollUtil.isNotEmpty(list)){
+                //不为空是,抛出异常,中断保存
+                throw new BusinessException(BusinessExceptionEnum.BUSINESS_STATION_NAME_UNIQUE_ERROR);
+            }
             //直接通过TreadLocal线程本地变量获取当前登录的会员id
             station.setId(SnowUtil.getSnowflakeNextId());
             station.setCreateTime(now);
