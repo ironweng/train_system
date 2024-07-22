@@ -1,15 +1,21 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 
 const routes = [{
     path: '/',
     component: () => import('../views/main.vue'),
     children: [{
-      path: 'welcome',
-      component: () => import('../views/main/welcome.vue'),
-    },{
-      path: 'about',
-      component: () => import('../views/main/about.vue'),
-    },{
+        path: 'welcome',
+        component: () => import('../views/main/welcome.vue'),
+    }, {
+        path: 'about',
+        component: () => import('../views/main/about.vue'),
+    }, {
+        path: 'business/',
+        children: [{
+            path: 'daily-train',
+            component: () => import('../views/main/business/daily-train.vue'),
+        }]
+    }, {
         path: 'base/',
         children: [{
             path: 'station',
@@ -27,21 +33,21 @@ const routes = [{
             path: 'train-seat',
             component: () => import('../views/main/base/train-seat.vue'),
         }]
-    },{
+    }, {
         path: 'batch/',
         children: [{
             path: 'job',
             component: () => import('../views/main/batch/job.vue')
         }]
     }]
-  }, {
+}, {
     path: '',
     redirect: '/welcome'
-  }];
+}];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
+    history: createWebHistory(process.env.BASE_URL),
+    routes
 })
 
 export default router
