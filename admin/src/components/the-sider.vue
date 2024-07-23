@@ -33,6 +33,11 @@
             <user-outlined /> &nbsp; 每日火车车站
           </router-link>
         </a-menu-item>
+        <a-menu-item key="/business/daily-train-carriage">
+          <router-link to="/business/daily-train-carriage">
+            <user-outlined /> &nbsp; 每日火车车厢
+          </router-link>
+        </a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="base">
         <template #title>
