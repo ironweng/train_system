@@ -14,12 +14,4 @@ public class DailyTrainQueryReq extends PageReq {
 
     private String code;
 
-    public String getTrainCode() {
-        return code;
-    }
-
-    public void setTrainCode(String code) {
-        this.code = code;
-    }
-
 }

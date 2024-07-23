@@ -44,9 +44,16 @@ public class DailyTrainStationService {
 
     public PageResp<DailyTrainStationQueryResp> queryList(DailyTrainStationQueryReq req){
         DailyTrainStationExample dailyTrainStationExample=new DailyTrainStationExample();
-        dailyTrainStationExample.setOrderByClause("id desc");
+        dailyTrainStationExample.setOrderByClause("date desc,train_code asc,`index` asc");
         DailyTrainStationExample.Criteria criteria = dailyTrainStationExample.createCriteria();
 
+        if (ObjUtil.isNotNull(req.getDate())) {
+            criteria.andDateEqualTo(req.getDate());
+        }
+
+        if (ObjUtil.isNotEmpty(req.getTrainCode())) {
+            criteria.andTrainCodeEqualTo(req.getTrainCode());
+        }
 
         log.info("req查询页码:{}",req.getPage());
         log.info("req每页条数:{}",req.getSize());
