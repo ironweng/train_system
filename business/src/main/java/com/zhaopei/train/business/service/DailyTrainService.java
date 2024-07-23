@@ -16,6 +16,7 @@ import com.zhaopei.train.business.resp.DailyTrainQueryResp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Slf4j
@@ -25,38 +26,45 @@ public class DailyTrainService {
     @Autowired
     private DailyTrainMapper dailyTrainMapper;
 
-    public void save(DailyTrainSaveReq req){
-        DateTime now=DateTime.now();
-        DailyTrain dailyTrain= BeanUtil.copyProperties(req,DailyTrain.class);
+    public void save(DailyTrainSaveReq req) {
+        DateTime now = DateTime.now();
+        DailyTrain dailyTrain = BeanUtil.copyProperties(req, DailyTrain.class);
         // if中是新增保存
-        if(ObjUtil.isNull(dailyTrain.getId())){
+        if (ObjUtil.isNull(dailyTrain.getId())) {
             //直接通过TreadLocal线程本地变量获取当前登录的会员id
             dailyTrain.setId(SnowUtil.getSnowflakeNextId());
             dailyTrain.setCreateTime(now);
             dailyTrain.setUpdateTime(now);
             dailyTrainMapper.insert(dailyTrain);
             //else是编辑保存
-        }else {
+        } else {
             dailyTrain.setUpdateTime(now);
             dailyTrainMapper.updateByPrimaryKey(dailyTrain);
         }
     }
 
-    public PageResp<DailyTrainQueryResp> queryList(DailyTrainQueryReq req){
-        DailyTrainExample dailyTrainExample=new DailyTrainExample();
-        dailyTrainExample.setOrderByClause("id desc");
+    public PageResp<DailyTrainQueryResp> queryList(DailyTrainQueryReq req) {
+        DailyTrainExample dailyTrainExample = new DailyTrainExample();
+        dailyTrainExample.setOrderByClause("date desc,code asc");
         DailyTrainExample.Criteria criteria = dailyTrainExample.createCriteria();
 
+        if (ObjUtil.isNotNull(req.getDate())) {
+            criteria.andDateEqualTo(req.getDate());
+        }
 
-        log.info("req查询页码:{}",req.getPage());
-        log.info("req每页条数:{}",req.getSize());
+        if (ObjUtil.isNotEmpty(req.getCode())) {
+            criteria.andCodeEqualTo(req.getCode());
+        }
+
+        log.info("req查询页码:{}", req.getPage());
+        log.info("req每页条数:{}", req.getSize());
         PageHelper.startPage(req.getPage(), req.getSize());
         List<DailyTrain> dailyTrainList = dailyTrainMapper.selectByExample(dailyTrainExample);
 
         //PageInfo的底层就是select ... count()... 即返回总条数
-        PageInfo<DailyTrain> pageInfo=new PageInfo<>(dailyTrainList);
-        log.info("resp总条数:{}",pageInfo.getTotal());
-        log.info("总页数:{}",pageInfo.getPages());
+        PageInfo<DailyTrain> pageInfo = new PageInfo<>(dailyTrainList);
+        log.info("resp总条数:{}", pageInfo.getTotal());
+        log.info("总页数:{}", pageInfo.getPages());
 
         List<DailyTrainQueryResp> list = BeanUtil.copyToList(dailyTrainList, DailyTrainQueryResp.class);
         PageResp<DailyTrainQueryResp> pageResp = new PageResp<>();
@@ -65,7 +73,7 @@ public class DailyTrainService {
         return pageResp;
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         dailyTrainMapper.deleteByPrimaryKey(id);
     }
 }
