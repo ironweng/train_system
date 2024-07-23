@@ -5,17 +5,19 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zhaopei.train.common.resp.PageResp;
-import com.zhaopei.train.common.util.SnowUtil;
 import com.zhaopei.train.business.domain.DailyTrainCarriage;
 import com.zhaopei.train.business.domain.DailyTrainCarriageExample;
+import com.zhaopei.train.business.enums.SeatColEnum;
 import com.zhaopei.train.business.mapper.DailyTrainCarriageMapper;
 import com.zhaopei.train.business.req.DailyTrainCarriageQueryReq;
 import com.zhaopei.train.business.req.DailyTrainCarriageSaveReq;
 import com.zhaopei.train.business.resp.DailyTrainCarriageQueryResp;
+import com.zhaopei.train.common.resp.PageResp;
+import com.zhaopei.train.common.util.SnowUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Slf4j
@@ -27,6 +29,12 @@ public class DailyTrainCarriageService {
 
     public void save(DailyTrainCarriageSaveReq req){
         DateTime now=DateTime.now();
+
+        // 自动计算出列数和总座位数
+        List<SeatColEnum> seatColEnums = SeatColEnum.getColsByType(req.getSeatType());
+        req.setColCount(seatColEnums.size());
+        req.setSeatCount(req.getColCount() * req.getRowCount());
+
         DailyTrainCarriage dailyTrainCarriage= BeanUtil.copyProperties(req,DailyTrainCarriage.class);
         // if中是新增保存
         if(ObjUtil.isNull(dailyTrainCarriage.getId())){
@@ -44,9 +52,16 @@ public class DailyTrainCarriageService {
 
     public PageResp<DailyTrainCarriageQueryResp> queryList(DailyTrainCarriageQueryReq req){
         DailyTrainCarriageExample dailyTrainCarriageExample=new DailyTrainCarriageExample();
-        dailyTrainCarriageExample.setOrderByClause("id desc");
+        dailyTrainCarriageExample.setOrderByClause("date desc,train_code asc,`index` asc");
         DailyTrainCarriageExample.Criteria criteria = dailyTrainCarriageExample.createCriteria();
 
+        if (ObjUtil.isNotNull(req.getDate())) {
+            criteria.andDateEqualTo(req.getDate());
+        }
+
+        if (ObjUtil.isNotEmpty(req.getTrainCode())) {
+            criteria.andTrainCodeEqualTo(req.getTrainCode());
+        }
 
         log.info("req查询页码:{}",req.getPage());
         log.info("req每页条数:{}",req.getSize());
