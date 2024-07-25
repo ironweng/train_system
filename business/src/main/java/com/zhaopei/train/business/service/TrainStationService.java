@@ -114,4 +114,12 @@ public class TrainStationService {
     public void delete(Long id){
         trainStationMapper.deleteByPrimaryKey(id);
     }
+
+    //service之间的调用可以另外写一个方法,就不需要copy变成resp形式的数据,直接返回数据库的实体。
+    public List<TrainStation> selectByTrainCode(String trainCode) {
+        TrainStationExample trainStationExample = new TrainStationExample();
+        trainStationExample.setOrderByClause("`index` asc");
+        trainStationExample.createCriteria().andTrainCodeEqualTo(trainCode);
+        return trainStationMapper.selectByExample(trainStationExample);
+    }
 }

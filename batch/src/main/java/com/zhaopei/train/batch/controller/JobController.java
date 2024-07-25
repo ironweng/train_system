@@ -1,4 +1,4 @@
-package com.zhaopei.train.batch.job;
+package com.zhaopei.train.batch.controller;
 
 import com.zhaopei.train.batch.req.CronJobReq;
 import com.zhaopei.train.batch.resp.CronJobResp;

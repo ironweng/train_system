@@ -100,4 +100,11 @@ public class TrainService {
         List<Train> trainList = trainMapper.selectByExample(trainExample);
         return BeanUtil.copyToList(trainList, TrainQueryResp.class);
     }
+
+    //service之间的调用可以另外写一个方法,就不需要copy变成resp形式的数据,直接返回数据库的实体。
+    public List<Train> selectAll() {
+        TrainExample trainExample = new TrainExample();
+        trainExample.setOrderByClause("code asc");
+        return trainMapper.selectByExample(trainExample);
+    }
 }
