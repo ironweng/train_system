@@ -61,7 +61,7 @@ public class DailyTrainCarriageService {
 
     public PageResp<DailyTrainCarriageQueryResp> queryList(DailyTrainCarriageQueryReq req){
         DailyTrainCarriageExample dailyTrainCarriageExample=new DailyTrainCarriageExample();
-        dailyTrainCarriageExample.setOrderByClause("date desc,train_code asc,`index` asc");
+        dailyTrainCarriageExample.setOrderByClause("date asc,train_code asc,`index` asc");
         DailyTrainCarriageExample.Criteria criteria = dailyTrainCarriageExample.createCriteria();
 
         if (ObjUtil.isNotNull(req.getDate())) {
