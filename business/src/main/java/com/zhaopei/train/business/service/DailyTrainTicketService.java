@@ -63,9 +63,22 @@ public class DailyTrainTicketService {
 
     public PageResp<DailyTrainTicketQueryResp> queryList(DailyTrainTicketQueryReq req){
         DailyTrainTicketExample dailyTrainTicketExample=new DailyTrainTicketExample();
-        dailyTrainTicketExample.setOrderByClause("id desc");
+        dailyTrainTicketExample.setOrderByClause("`date` desc, start_time asc, train_code asc, `start_index` asc, `end_index` asc");
         DailyTrainTicketExample.Criteria criteria = dailyTrainTicketExample.createCriteria();
 
+        //四个查询条件
+        if (ObjUtil.isNotNull(req.getDate())) {
+            criteria.andDateEqualTo(req.getDate());
+        }
+        if (ObjUtil.isNotEmpty(req.getTrainCode())) {
+            criteria.andTrainCodeEqualTo(req.getTrainCode());
+        }
+        if (ObjUtil.isNotEmpty(req.getStart())) {
+            criteria.andStartEqualTo(req.getStart());
+        }
+        if (ObjUtil.isNotEmpty(req.getEnd())) {
+            criteria.andEndEqualTo(req.getEnd());
+        }
 
         log.info("req查询页码:{}",req.getPage());
         log.info("req每页条数:{}",req.getSize());
@@ -119,7 +132,6 @@ public class DailyTrainTicketService {
             for (int j = (i + 1); j < stationList.size(); j++) {
                 TrainStation trainStationEnd = stationList.get(j);
                 sumKM = sumKM.add(trainStationEnd.getKm());
-
                 DailyTrainTicket dailyTrainTicket = new DailyTrainTicket();
                 dailyTrainTicket.setId(SnowUtil.getSnowflakeNextId());
                 dailyTrainTicket.setDate(date);
@@ -140,7 +152,6 @@ public class DailyTrainTicketService {
                 //hutool提供的方法,根据枚举中的某个field得到另一个field的值,这里是根据枚举中code=trainType的枚举,取它的PriceRate
                 //不用这个lambda表达式也行，可以直接循环得到
                 BigDecimal priceRate = EnumUtil.getFieldBy(TrainTypeEnum::getPriceRate, TrainTypeEnum::getCode, trainType);
-
                 BigDecimal ydzPrice = sumKM.multiply(SeatTypeEnum.YDZ.getPrice()).multiply(priceRate).setScale(2, RoundingMode.HALF_UP);
                 BigDecimal edzPrice = sumKM.multiply(SeatTypeEnum.EDZ.getPrice()).multiply(priceRate).setScale(2, RoundingMode.HALF_UP);
                 BigDecimal rwPrice = sumKM.multiply(SeatTypeEnum.RW.getPrice()).multiply(priceRate).setScale(2, RoundingMode.HALF_UP);
