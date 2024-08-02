@@ -188,7 +188,7 @@ public class ConfirmOrderService {
         log.info("最终选座：{}",finalSeatList);
 
         //最终确定选座后，更新数据库
-        afterConfirmOrderService.afterDoConfirm(dailyTrainTicket,finalSeatList);
+        afterConfirmOrderService.afterDoConfirm(dailyTrainTicket,tickets,finalSeatList);
     }
 
     /**
