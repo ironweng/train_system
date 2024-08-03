@@ -1,7 +1,9 @@
 package com.zhaopei.train.business.service;
 
+import com.zhaopei.train.business.domain.ConfirmOrder;
 import com.zhaopei.train.business.domain.DailyTrainSeat;
 import com.zhaopei.train.business.domain.DailyTrainTicket;
+import com.zhaopei.train.business.enums.ConfirmOrderStatusEnum;
 import com.zhaopei.train.business.feign.MemberFeign;
 import com.zhaopei.train.business.mapper.ConfirmOrderMapper;
 import com.zhaopei.train.business.mapper.DailyTrainSeatMapper;
@@ -48,7 +50,7 @@ public class AfterConfirmOrderService {
 
     // @GlobalTransactional
     @Transactional
-    public void afterDoConfirm(DailyTrainTicket dailyTrainTicket, List<ConfirmOrderTicketReq> tickets, List<DailyTrainSeat> finalSeatList) {
+    public void afterDoConfirm(DailyTrainTicket dailyTrainTicket, List<ConfirmOrderTicketReq> tickets, List<DailyTrainSeat> finalSeatList,ConfirmOrder confirmOrder) {
         // LOG.info("seata全局事务ID: {}", RootContext.getXID());
         for (int j = 0; j < finalSeatList.size(); j++) {
             DailyTrainSeat dailyTrainSeat = finalSeatList.get(j);
@@ -124,12 +126,12 @@ public class AfterConfirmOrderService {
             CommonResp<Object> commonResp = memberFeign.save(memberTicketReq);
             LOG.info("调用member接口，返回：{}", commonResp);
 //
-//            // 更新订单状态为成功
-//            ConfirmOrder confirmOrderForUpdate = new ConfirmOrder();
-//            confirmOrderForUpdate.setId(confirmOrder.getId());
-//            confirmOrderForUpdate.setUpdateTime(new Date());
-//            confirmOrderForUpdate.setStatus(ConfirmOrderStatusEnum.SUCCESS.getCode());
-//            confirmOrderMapper.updateByPrimaryKeySelective(confirmOrderForUpdate);
+            // 更新订单状态为成功(将一开始就入库的订单状态更新)
+            ConfirmOrder confirmOrderForUpdate = new ConfirmOrder();
+            confirmOrderForUpdate.setId(confirmOrder.getId());
+            confirmOrderForUpdate.setUpdateTime(new Date());
+            confirmOrderForUpdate.setStatus(ConfirmOrderStatusEnum.SUCCESS.getCode());
+            confirmOrderMapper.updateByPrimaryKeySelective(confirmOrderForUpdate);
 
             // 模拟调用方出现异常
             // Thread.sleep(10000);

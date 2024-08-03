@@ -19,6 +19,7 @@ import com.zhaopei.train.business.req.ConfirmOrderDoReq;
 import com.zhaopei.train.business.req.ConfirmOrderQueryReq;
 import com.zhaopei.train.business.req.ConfirmOrderTicketReq;
 import com.zhaopei.train.business.resp.ConfirmOrderQueryResp;
+import com.zhaopei.train.common.context.LoginMemberContext;
 import com.zhaopei.train.common.exception.BusinessException;
 import com.zhaopei.train.common.exception.BusinessExceptionEnum;
 import com.zhaopei.train.common.resp.PageResp;
@@ -108,7 +109,7 @@ public class ConfirmOrderService {
          confirmOrder.setId(SnowUtil.getSnowflakeNextId());
          confirmOrder.setCreateTime(now);
          confirmOrder.setUpdateTime(now);
-         confirmOrder.setMemberId(req.getMemberId());
+         confirmOrder.setMemberId(LoginMemberContext.getId());
          confirmOrder.setDate(date);
          confirmOrder.setTrainCode(trainCode);
          confirmOrder.setStart(start);
@@ -116,6 +117,7 @@ public class ConfirmOrderService {
          confirmOrder.setDailyTrainTicketId(req.getDailyTrainTicketId());
          confirmOrder.setStatus(ConfirmOrderStatusEnum.INIT.getCode());
          confirmOrder.setTickets(JSON.toJSONString(tickets));
+         //不管这个订单最终有么有支付成功，都先入库，留下记录
          confirmOrderMapper.insert(confirmOrder);
 
          //查出余票记录，需要得到真是的库存
@@ -188,7 +190,7 @@ public class ConfirmOrderService {
         log.info("最终选座：{}",finalSeatList);
 
         //最终确定选座后，更新数据库
-        afterConfirmOrderService.afterDoConfirm(dailyTrainTicket,tickets,finalSeatList);
+        afterConfirmOrderService.afterDoConfirm(dailyTrainTicket,tickets,finalSeatList,confirmOrder);
     }
 
     /**
