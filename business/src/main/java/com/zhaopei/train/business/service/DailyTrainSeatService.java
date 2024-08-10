@@ -121,12 +121,15 @@ public class DailyTrainSeatService {
         log.info("生成日期【{}】车次【{}】的座位信息结束", DateUtil.formatDate(date), trainCode);
     }
 
+    public int countSeat(Date date, String trainCode) {
+        return countSeat(date, trainCode, null);
+    }
+
     public int countSeat(Date date, String trainCode, String seatType) {
         DailyTrainSeatExample example = new DailyTrainSeatExample();
         DailyTrainSeatExample.Criteria criteria = example.createCriteria();
         criteria.andDateEqualTo(date)
                 .andTrainCodeEqualTo(trainCode);
-        //没有该类型座位时返回-1，不建议用0，因为这会和某类型座位票卖完的情况混淆
         if (StrUtil.isNotBlank(seatType)) {
             criteria.andSeatTypeEqualTo(seatType);
         }

@@ -19,8 +19,7 @@ public class ControllerExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
     /**
-     * 所有异常统一处理,这里是我们不能定义的异常，属于程序本身的异常，我们统一抛出"系统出现异常，请联系管理员"
-     *
+     * 所有异常统一处理
      * @param e
      * @return
      */
@@ -41,7 +40,6 @@ public class ControllerExceptionHandler {
 
     /**
      * 业务异常统一处理
-     *
      * @param e
      * @return
      */
@@ -49,16 +47,14 @@ public class ControllerExceptionHandler {
     @ResponseBody
     public CommonResp exceptionHandler(BusinessException e) {
         CommonResp commonResp = new CommonResp();
-        LOG.error("业务异常：{}", e);
+        LOG.error("业务异常：{}", e.getE().getDesc());
         commonResp.setSuccess(false);
         commonResp.setMessage(e.getE().getDesc());
         return commonResp;
     }
 
-
     /**
      * 校验异常统一处理
-     *
      * @param e
      * @return
      */
@@ -71,17 +67,16 @@ public class ControllerExceptionHandler {
         commonResp.setMessage(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         return commonResp;
     }
+
+    /**
+     * 校验异常统一处理
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = RuntimeException.class)
+    @ResponseBody
+    public CommonResp exceptionHandler(RuntimeException e) {
+        throw e;
+    }
+
 }
-//
-//    /**
-//     * 校验异常统一处理
-//     * @param e
-//     * @return
-//     */
-//    @ExceptionHandler(value = RuntimeException.class)
-//    @ResponseBody
-//    public CommonResp exceptionHandler(RuntimeException e) {
-//        throw e;
-//    }
-//
-//}

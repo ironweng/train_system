@@ -19,11 +19,11 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class MemberInterceptor implements HandlerInterceptor {
 
-//    private static final Logger LOG = LoggerFactory.getLogger(MemberInterceptor.class);
+//    private static final Logger log = LoggerFactory.getLogger(MemberInterceptor.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("-----MemberInterceptor开始,线程本地变量开启-----");
+        log.info("MemberInterceptor开始");
         //获取header的token参数
         String token = request.getHeader("token");
         if (StrUtil.isNotBlank(token)) {
@@ -33,7 +33,7 @@ public class MemberInterceptor implements HandlerInterceptor {
             MemberLoginResp member = JSONUtil.toBean(loginMember, MemberLoginResp.class);
             LoginMemberContext.setMember(member);
         }
-        log.info("-------MemberInterceptor结束-------");
+        log.info("MemberInterceptor结束");
         return true;
     }
 

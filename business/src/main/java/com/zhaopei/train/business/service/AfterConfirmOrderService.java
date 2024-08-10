@@ -9,7 +9,6 @@ import com.zhaopei.train.business.mapper.ConfirmOrderMapper;
 import com.zhaopei.train.business.mapper.DailyTrainSeatMapper;
 import com.zhaopei.train.business.mapper.cust.DailyTrainTicketMapperCust;
 import com.zhaopei.train.business.req.ConfirmOrderTicketReq;
-import com.zhaopei.train.common.context.LoginMemberContext;
 import com.zhaopei.train.common.req.MemberTicketReq;
 import com.zhaopei.train.common.resp.CommonResp;
 import jakarta.annotation.Resource;
@@ -17,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -32,13 +30,13 @@ public class AfterConfirmOrderService {
     private DailyTrainSeatMapper dailyTrainSeatMapper;
 
     @Resource
-    private ConfirmOrderMapper confirmOrderMapper;
-
-    @Resource
     private DailyTrainTicketMapperCust dailyTrainTicketMapperCust;
 
     @Resource
     private MemberFeign memberFeign;
+
+    @Resource
+    private ConfirmOrderMapper confirmOrderMapper;
 
     /**
      * 选中座位后事务处理：
@@ -47,10 +45,9 @@ public class AfterConfirmOrderService {
      *  为会员增加购票记录
      *  更新确认订单为成功
      */
-
+    // @Transactional
     // @GlobalTransactional
-    @Transactional
-    public void afterDoConfirm(DailyTrainTicket dailyTrainTicket, List<ConfirmOrderTicketReq> tickets, List<DailyTrainSeat> finalSeatList,ConfirmOrder confirmOrder) {
+    public void afterDoConfirm(DailyTrainTicket dailyTrainTicket, List<DailyTrainSeat> finalSeatList, List<ConfirmOrderTicketReq> tickets, ConfirmOrder confirmOrder) throws Exception {
         // LOG.info("seata全局事务ID: {}", RootContext.getXID());
         for (int j = 0; j < finalSeatList.size(); j++) {
             DailyTrainSeat dailyTrainSeat = finalSeatList.get(j);
@@ -67,7 +64,7 @@ public class AfterConfirmOrderService {
             // 原售：001000001
             // 购买：000011100
             // 新售：001011101
-            // 影响的区间：XXX11111X
+            // 影响：XXX11111X
             // Integer startIndex = 4;
             // Integer endIndex = 7;
             // Integer minStartIndex = startIndex - 往前碰到的最后一个0;
@@ -88,7 +85,7 @@ public class AfterConfirmOrderService {
                 }
             }
             LOG.info("影响出发站区间：" + minStartIndex + "-" + maxStartIndex);
-//
+
             Integer maxEndIndex = seatForUpdate.getSell().length();
             for (int i = endIndex; i < seatForUpdate.getSell().length(); i++) {
                 char aChar = chars[i];
@@ -98,7 +95,7 @@ public class AfterConfirmOrderService {
                 }
             }
             LOG.info("影响到达站区间：" + minEndIndex + "-" + maxEndIndex);
-//
+
             dailyTrainTicketMapperCust.updateCountBySell(
                     dailyTrainSeat.getDate(),
                     dailyTrainSeat.getTrainCode(),
@@ -107,10 +104,10 @@ public class AfterConfirmOrderService {
                     maxStartIndex,
                     minEndIndex,
                     maxEndIndex);
-//
-            // 调用会员服务接口，为会员增加一张车票,这是留下记录，方便后续打印
+
+            // 调用会员服务接口，为会员增加一张车票
             MemberTicketReq memberTicketReq = new MemberTicketReq();
-            memberTicketReq.setMemberId(LoginMemberContext.getId());
+            memberTicketReq.setMemberId(confirmOrder.getMemberId());
             memberTicketReq.setPassengerId(tickets.get(j).getPassengerId());
             memberTicketReq.setPassengerName(tickets.get(j).getPassengerName());
             memberTicketReq.setTrainDate(dailyTrainTicket.getDate());
@@ -125,8 +122,8 @@ public class AfterConfirmOrderService {
             memberTicketReq.setSeatType(dailyTrainSeat.getSeatType());
             CommonResp<Object> commonResp = memberFeign.save(memberTicketReq);
             LOG.info("调用member接口，返回：{}", commonResp);
-//
-            // 更新订单状态为成功(将一开始就入库的订单状态更新)
+
+            // 更新订单状态为成功
             ConfirmOrder confirmOrderForUpdate = new ConfirmOrder();
             confirmOrderForUpdate.setId(confirmOrder.getId());
             confirmOrderForUpdate.setUpdateTime(new Date());
