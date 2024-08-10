@@ -20,6 +20,7 @@ import com.zhaopei.train.common.util.SnowUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -94,10 +95,11 @@ public class TrainService {
     }
 
     //查询所有车次信息,可用于做车次编号的下拉框
-    public List<TrainQueryResp> queryAll(){
-        TrainExample trainExample=new TrainExample();
-        trainExample.setOrderByClause("code asc");
-        List<Train> trainList = trainMapper.selectByExample(trainExample);
+    @Transactional
+    public List<TrainQueryResp> queryAll() {
+        List<Train> trainList = selectAll();
+        // LOG.info("再查一次");
+        // trainList = selectAll();
         return BeanUtil.copyToList(trainList, TrainQueryResp.class);
     }
 
